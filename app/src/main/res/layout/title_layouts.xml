@@ -12,12 +12,20 @@
         android:layout_gravity="center"
         android:background="@drawable/ic_arrow_back_black_24dp"/>
 
+    <TextView
+        android:id="@+id/show_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="140dp"
+        android:text="编辑"/>
+
     <Button
         android:id="@+id/save"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="320dp"
+        android:layout_marginLeft="150dp"
         android:background="@drawable/ic_assignment_turned_in_black_24dp"/>
 
 </LinearLayout>

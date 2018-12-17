@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
@@ -20,6 +22,7 @@ import android.content.Intent;
 
 import java.util.ArrayList;
 
+//笔记界面
 public class NoteActivity extends Fragment {
     private ListView noteListView;
     private SimpleDateFormat simpleDateFormat;
@@ -29,11 +32,14 @@ public class NoteActivity extends Fragment {
     private MyBaseAdapter1 baseAdapter1;
     private boolean selfChange = false;
     private String saveTitle="",saveValue="";
+    public  SlideLayout slideLayout = null;
+    private LinearLayout linearLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.note_layout,container,false);
+        view.setClickable(true);
         return view;
     }
 
@@ -47,19 +53,6 @@ public class NoteActivity extends Fragment {
         baseAdapter1 = new MyBaseAdapter1();
         noteListView.setAdapter(baseAdapter1);
         initial();
-        noteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                titles = arrayTitle.get(position);
-                values = arrayContent.get(position);
-                intent = new Intent(getContext(),EditActivity.class);
-                intent.putExtra("myTitle",titles);
-                intent.putExtra("myValue",values);
-                saveTitle = titles;
-                saveValue = values;
-                startActivityForResult(intent,0);
-            }
-        });
     }
 
     @Override
@@ -100,46 +93,6 @@ public class NoteActivity extends Fragment {
         arrayContent.add("这里是语文四字词");
     }
 
-    class MyBaseAdapter1 extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return arrayTitle.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return arrayTitle.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if(convertView==null){
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.lv_list,parent,false);
-                holder = new ViewHolder();
-                holder.texts = (TextView) convertView.findViewById(R.id.list_text);
-                holder.contents = (TextView) convertView.findViewById(R.id.list_texts);
-                convertView.setTag(holder);
-            }
-            else{
-                holder = (ViewHolder) convertView.getTag();
-            }
-            holder.texts.setText(arrayTimes.get(position));
-            holder.contents.setText(arrayTitle.get(position));
-            return convertView;
-        }
-    }
-
-    class ViewHolder{
-        TextView texts;
-        TextView contents;
-    }
-
     public void updateListView(String title,String content){
         titles = title;
         values = content;
@@ -170,6 +123,97 @@ public class NoteActivity extends Fragment {
             noteListView.setAdapter(baseAdapter1);
             noteListView.setSelection(arrayTitle.size()-1);
         }
+    }
+
+    class MyBaseAdapter1 extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return arrayTitle.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return arrayTitle.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if(convertView==null){
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.lv_list,parent,false);
+                holder = new ViewHolder();
+                holder.texts = (TextView) convertView.findViewById(R.id.list_text);
+                holder.contents = (TextView) convertView.findViewById(R.id.list_texts);
+                holder.deletes = (Button) convertView.findViewById(R.id.delete_button);
+                linearLayout = (LinearLayout) convertView.findViewById(R.id.contents);
+                convertView.setTag(holder);
+            }
+            else{
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.texts.setText(arrayTimes.get(position));
+            holder.contents.setText(arrayTitle.get(position));
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    titles = arrayTitle.get(position);
+                    values = arrayContent.get(position);
+                    intent = new Intent(getContext(),EditActivity.class);
+                    intent.putExtra("myTitle",titles);
+                    intent.putExtra("myValue",values);
+                    saveTitle = titles;
+                    saveValue = values;
+                    startActivityForResult(intent,0);
+                }
+            });
+            holder.deletes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    arrayContent.remove(position);
+                    arrayTimes.remove(position);
+                    arrayTitle.remove(position);
+                    notifyDataSetChanged();
+                    slideLayout.closeMenu();
+                }
+            });
+            slideLayout = (SlideLayout) convertView;
+            slideLayout.setOnStateChangeListener(new MyOnStateChangeListener());
+            return convertView;
+        }
+    }
+
+    class MyOnStateChangeListener implements SlideLayout.OnStateChangeListener{
+            @Override
+            public void onOpen(SlideLayout layout) {
+                slideLayout = layout;
+            }
+
+            @Override
+            public void onMove(SlideLayout layout) {
+                if (slideLayout != null && slideLayout !=layout)
+                {
+                    slideLayout.closeMenu();
+                }
+            }
+
+            @Override
+            public void onClose(SlideLayout layout) {
+                if (slideLayout == layout)
+                {
+                    slideLayout = null;
+                }
+            }
+        }
+
+    class ViewHolder{
+        TextView texts;
+        TextView contents;
+        Button deletes;
     }
 
 }

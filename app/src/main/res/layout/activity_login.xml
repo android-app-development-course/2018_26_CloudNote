@@ -79,11 +79,13 @@
             android:layout_centerHorizontal="true"/>
 
         <TextView
+            android:id="@+id/forget_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="忘记密码"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
+            android:background="@drawable/style"
             android:layout_below="@id/login_button"/>
 
     </RelativeLayout>

@@ -9,9 +9,11 @@ import android.widget.TextView;
 import android.view.*;
 import android.content.*;
 import android.util.*;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+//编辑界面
 public class EditActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText editText,editTitle;
     private Button button1,button2;
@@ -57,6 +59,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("title",titles);
                 intent.putExtra("content",contents);
                 setResult(2,intent);
+                Toast.makeText(getApplicationContext(),"添加成功！",Toast.LENGTH_SHORT).show();
                 finish();
                 break;
         }

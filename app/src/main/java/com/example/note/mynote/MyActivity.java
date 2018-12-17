@@ -9,20 +9,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.app.AlertDialog;
 import android.content.*;
+import android.widget.Toast;
 
+//我的界面
 public class MyActivity extends Fragment {
     private ListView myListView;
-    private int[] icons = {R.drawable.ic_perm_identity_black_24dp,R.drawable.ic_event_black_24dp
-            ,R.drawable.ic_label_outline_black_24dp,R.drawable.ic_notifications_none_black_24dp};
-    private String[] title = {"个人信息","备忘录","我的标签","消息中心"};
+    private int[] icons = {R.drawable.ic_perm_identity_black_24dp,R.drawable.ic_verified_user_black_24dp
+            ,R.drawable.ic_notifications_none_black_24dp,R.drawable.ic_security_black_24dp};
+    private String[] title = {"个人信息","备份","消息中心","修改密码"};
     private Button logins,changes,exits;
     private Intent intent;
+    private boolean logined = false;
 
     @Nullable
     @Override
@@ -37,6 +42,24 @@ public class MyActivity extends Fragment {
                 startActivityForResult(intent,4);
             }
         });
+        changes = (Button) view.findViewById(R.id.change_button);
+        changes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(getActivity().getApplicationContext(),LoginActivity.class);
+                startActivityForResult(intent,4);
+            }
+        });
+        exits = (Button) view.findViewById(R.id.exit_button);
+        exits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exits.setVisibility(View.INVISIBLE);
+                changes.setVisibility(View.INVISIBLE);
+                logins.setVisibility(View.VISIBLE);
+                logined = false;
+            }
+        });
         return view;
     }
 
@@ -46,6 +69,41 @@ public class MyActivity extends Fragment {
         myListView = (ListView) getActivity().findViewById(R.id.mylv);
         MyBaseAdapter2 baseAdapter2 = new MyBaseAdapter2();
         myListView.setAdapter(baseAdapter2);
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(logined==true){
+                    if(position==0){
+                        Intent intent = new Intent(getContext(),MyMessage.class);
+                        startActivity(intent);
+                    }
+                    else if(position==1){
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("提示");
+                        builder.setMessage("您确定进行备份吗");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getContext(),"备份成功！",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        builder.setNegativeButton("取消", null);
+                        builder.show();
+                    }
+                    else if(position==2){
+                        Intent intent = new Intent(getContext(),TopTab.class);
+                        startActivity(intent);
+                    }
+                    else if(position==3){
+                        Intent intent = new Intent(getContext(),ModifyActivity.class);
+                        startActivity(intent);
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(),"请先登录再进行相关操作",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -58,6 +116,7 @@ public class MyActivity extends Fragment {
                 logins.setVisibility(View.GONE);
                 changes.setVisibility(View.VISIBLE);
                 exits.setVisibility(View.VISIBLE);
+                logined = true;
             }
         }
         return;

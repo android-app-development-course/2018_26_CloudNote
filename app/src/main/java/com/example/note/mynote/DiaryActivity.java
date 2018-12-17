@@ -11,13 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class DiaryActivity extends Fragment {
+//日记界面
+public class DiaryActivity extends Fragment{
     private ListView diaryListView;
     private SimpleDateFormat simpleDateFormat;
     private ArrayList<String> arrayTimes,arrayTitle,arrayContent;
@@ -26,6 +29,8 @@ public class DiaryActivity extends Fragment {
     private boolean selfChange = false;
     private Intent intent;
     private MyBaseAdapter3 myBaseAdapter3;
+    public  SlideLayout slideLayout = null;
+    private LinearLayout linearLayout;
 
     @Nullable
     @Override
@@ -44,19 +49,6 @@ public class DiaryActivity extends Fragment {
         myBaseAdapter3 = new MyBaseAdapter3();
         diaryListView.setAdapter(myBaseAdapter3);
         initial();
-        diaryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                titles = arrayTitle.get(position);
-                values = arrayContent.get(position);
-                intent = new Intent(getContext(),EditActivity.class);
-                intent.putExtra("myTitle",titles);
-                intent.putExtra("myValue",values);
-                saveTitle = titles;
-                saveValue = values;
-                startActivityForResult(intent,3);
-            }
-        });
     }
 
     @Override
@@ -98,46 +90,6 @@ public class DiaryActivity extends Fragment {
         arrayContent.add("这里是熬夜睡不着");
     }
 
-    class MyBaseAdapter3 extends BaseAdapter {
-        @Override
-        public int getCount() {
-            return arrayTitle.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return arrayTitle.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-            if(convertView==null){
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.lv_list,parent,false);
-                holder = new ViewHolder();
-                holder.texts = (TextView) convertView.findViewById(R.id.list_text);
-                holder.contents = (TextView) convertView.findViewById(R.id.list_texts);
-                convertView.setTag(holder);
-            }
-            else{
-                holder = (ViewHolder) convertView.getTag();
-            }
-            holder.texts.setText(arrayTimes.get(position));
-            holder.contents.setText(arrayTitle.get(position));
-            return convertView;
-        }
-    }
-
-    class ViewHolder{
-        TextView texts;
-        TextView contents;
-    }
-
     public void updateListView(String title,String content){
         titles = title;
         values = content;
@@ -168,5 +120,97 @@ public class DiaryActivity extends Fragment {
             diaryListView.setAdapter(myBaseAdapter3);
             diaryListView.setSelection(arrayTitle.size()-1);
         }
+    }
+
+    class MyBaseAdapter3 extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return arrayTitle.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return arrayTitle.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if(convertView==null){
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.lv_list,parent,false);
+                holder = new ViewHolder();
+                holder.texts = (TextView) convertView.findViewById(R.id.list_text);
+                holder.contents = (TextView) convertView.findViewById(R.id.list_texts);
+                holder.deletes = (Button) convertView.findViewById(R.id.delete_button);
+                linearLayout = (LinearLayout) convertView.findViewById(R.id.contents);
+                convertView.setTag(holder);
+            }
+            else{
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.texts.setText(arrayTimes.get(position));
+            holder.contents.setText(arrayTitle.get(position));
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    titles = arrayTitle.get(position);
+                    values = arrayContent.get(position);
+                    intent = new Intent(getContext(),EditActivity.class);
+                    intent.putExtra("myTitle",titles);
+                    intent.putExtra("myValue",values);
+                    saveTitle = titles;
+                    saveValue = values;
+                    startActivityForResult(intent,3);
+                }
+            });
+            holder.deletes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    arrayContent.remove(position);
+                    arrayTimes.remove(position);
+                    arrayTitle.remove(position);
+                    notifyDataSetChanged();
+                    slideLayout.closeMenu();
+                }
+            });
+            slideLayout = (SlideLayout) convertView;
+            slideLayout.setOnStateChangeListener(new MyOnStateChangeListener());
+            return convertView;
+        }
+    }
+
+    class MyOnStateChangeListener implements SlideLayout.OnStateChangeListener{
+        @Override
+        public void onOpen(SlideLayout layout) {
+
+            slideLayout = layout;
+        }
+
+        @Override
+        public void onMove(SlideLayout layout) {
+            if (slideLayout != null && slideLayout !=layout)
+            {
+                slideLayout.closeMenu();
+            }
+        }
+
+        @Override
+        public void onClose(SlideLayout layout) {
+            if (slideLayout == layout)
+            {
+                slideLayout = null;
+            }
+        }
+    }
+
+    class ViewHolder{
+        TextView texts;
+        TextView contents;
+        Button deletes;
     }
 }

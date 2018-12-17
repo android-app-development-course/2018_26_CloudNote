@@ -1,16 +1,19 @@
 package com.example.note.mynote;
 
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.*;
 import android.view.View;
 import android.widget.*;
 
+//登录界面
 public class LoginActivity extends AppCompatActivity {
-    private Button login,back;
+    private Button login,back,register;
     private EditText account,password;
     private String accounts,passwords;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,24 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        textView = (TextView) findViewById(R.id.forget_text);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),EditPassword.class);
+                startActivity(intent);
+            }
+        });
+
+        register = (Button) findViewById(R.id.res_button);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),RegisterSet.class);
+                startActivity(intent);
             }
         });
     }
