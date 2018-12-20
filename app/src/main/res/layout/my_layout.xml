@@ -5,11 +5,11 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:background="@mipmap/ic_launcher_round"
+        android:background="@drawable/touxiang"
         />
 
     <ListView
@@ -37,13 +37,14 @@
             android:fontFamily="serif"
             android:includeFontPadding="true"
             android:layout_gravity="center"
-            android:textColor="@android:color/black"/>
+            android:background="@color/colorPrimaryDark"/>
 
         <Button
             android:id="@+id/change_button"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:text="切换账户"
+            android:background="@color/colorPrimaryDark"
             android:fontFamily="serif"
             android:includeFontPadding="true"
             android:layout_gravity="center"
@@ -58,6 +59,7 @@
             android:layout_height="wrap_content"
             android:visibility="invisible"
             android:text="退出登录"
+            android:background="@color/colorPrimaryDark"
             android:textColor="@android:color/holo_red_light"/>
 
     </LinearLayout>

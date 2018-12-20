@@ -15,11 +15,11 @@
         <ImageView
             android:id="@+id/image_views"
             android:layout_below="@id/modifyTitle"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:background="@mipmap/ic_launcher_round"
+            android:background="@drawable/touxiang"
             />
 
         <TextView
@@ -39,7 +39,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="10dp"
-            android:hint="Type something..."
+            android:hint="请输入原密码"
             android:maxLength="15"/>
 
         <TextView
@@ -59,7 +59,7 @@
             android:padding="10dp"
             android:lines="1"
             android:maxLines="1"
-            android:hint="Type something..."
+            android:hint="请输入新密码"
             android:inputType="textPassword"
             android:maxLength="15"/>
 
@@ -70,7 +70,8 @@
             android:layout_below="@id/newPassword"
             android:layout_marginTop="60dp"
             android:layout_centerHorizontal="true"
-            android:text="确认修改"/>
+            android:text="确认修改"
+            android:background="@color/colorPrimaryDark"/>
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

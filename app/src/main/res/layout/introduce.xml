@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@android:color/darker_gray">
-
+    android:background="@color/colorPrimaryDark">
     <Button
         android:id="@+id/backs"
         android:layout_width="24dp"
@@ -18,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="个人简介"
+        android:textColor="@android:color/white"
         android:layout_marginLeft="135dp"/>
 
     <Button

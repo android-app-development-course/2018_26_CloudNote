@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@android:color/darker_gray">
+    android:background="@color/colorPrimaryDark">
 
     <Button
         android:id="@+id/backs"
@@ -17,6 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="个人信息"
+        android:textSize="20dp"
+        android:textColor="@android:color/white"
         android:layout_marginLeft="125dp"/>
 
 </LinearLayout>

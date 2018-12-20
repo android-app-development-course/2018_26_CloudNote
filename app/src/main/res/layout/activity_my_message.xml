@@ -8,12 +8,12 @@
 
     <ImageView
         android:id="@+id/msg_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/msg_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:background="@mipmap/ic_launcher_round"
+        android:background="@drawable/touxiang"
         />
 
     <ListView

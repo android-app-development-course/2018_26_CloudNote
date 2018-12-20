@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <include layout="@layout/introduce"
             android:id="@+id/intro_title"/>
 
@@ -18,8 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/intro_title"
-            android:padding="5dp"
-            android:hint="Type something..." />
+            android:padding="12dp"
+            android:hint="这个人很懒，什么也没有写..." />
 
     </RelativeLayout>
 
