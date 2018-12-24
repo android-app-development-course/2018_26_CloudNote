@@ -30,7 +30,6 @@ public class DiaryActivity extends Fragment{
     private Intent intent;
     private MyBaseAdapter3 myBaseAdapter3;
     public  SlideLayout slideLayout = null;
-    private LinearLayout linearLayout;
 
     @Nullable
     @Override
@@ -147,7 +146,7 @@ public class DiaryActivity extends Fragment{
                 holder.texts = (TextView) convertView.findViewById(R.id.list_text);
                 holder.contents = (TextView) convertView.findViewById(R.id.list_texts);
                 holder.deletes = (Button) convertView.findViewById(R.id.delete_button);
-                linearLayout = (LinearLayout) convertView.findViewById(R.id.contents);
+                holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.contents);
                 convertView.setTag(holder);
             }
             else{
@@ -155,7 +154,7 @@ public class DiaryActivity extends Fragment{
             }
             holder.texts.setText(arrayTimes.get(position));
             holder.contents.setText(arrayTitle.get(position));
-            linearLayout.setOnClickListener(new View.OnClickListener() {
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     titles = arrayTitle.get(position);
@@ -212,5 +211,6 @@ public class DiaryActivity extends Fragment{
         TextView texts;
         TextView contents;
         Button deletes;
+        LinearLayout linearLayout;
     }
 }

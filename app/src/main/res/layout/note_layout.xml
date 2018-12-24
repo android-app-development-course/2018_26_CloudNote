@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#d9d9d9"
-        android:dividerHeight="1dp"></ListView>
+        android:dividerHeight="1dp"
+        android:layout_marginBottom="55dp"></ListView>
 
 </RelativeLayout>

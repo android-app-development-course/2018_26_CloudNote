@@ -13,8 +13,9 @@
         android:layout_below="@+id/msg_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:background="@drawable/touxiang"
-        />
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/touxiang"/>
 
     <ListView
         android:id="@+id/msg_lv"

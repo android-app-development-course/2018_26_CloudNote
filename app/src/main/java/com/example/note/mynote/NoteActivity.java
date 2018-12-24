@@ -33,7 +33,7 @@ public class NoteActivity extends Fragment {
     private boolean selfChange = false;
     private String saveTitle="",saveValue="";
     public  SlideLayout slideLayout = null;
-    private LinearLayout linearLayout;
+    private int locate = 0;
 
     @Nullable
     @Override
@@ -150,7 +150,7 @@ public class NoteActivity extends Fragment {
                 holder.texts = (TextView) convertView.findViewById(R.id.list_text);
                 holder.contents = (TextView) convertView.findViewById(R.id.list_texts);
                 holder.deletes = (Button) convertView.findViewById(R.id.delete_button);
-                linearLayout = (LinearLayout) convertView.findViewById(R.id.contents);
+                holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.contents);
                 convertView.setTag(holder);
             }
             else{
@@ -158,11 +158,15 @@ public class NoteActivity extends Fragment {
             }
             holder.texts.setText(arrayTimes.get(position));
             holder.contents.setText(arrayTitle.get(position));
-            linearLayout.setOnClickListener(new View.OnClickListener() {
+
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     titles = arrayTitle.get(position);
                     values = arrayContent.get(position);
+                    Log.d("aaaaa",String.valueOf(position));
+                    Log.d("aaaaa",titles);
+                    Log.d("aaaaa",values);
                     intent = new Intent(getContext(),EditActivity.class);
                     intent.putExtra("myTitle",titles);
                     intent.putExtra("myValue",values);
@@ -174,9 +178,11 @@ public class NoteActivity extends Fragment {
             holder.deletes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     arrayContent.remove(position);
                     arrayTimes.remove(position);
                     arrayTitle.remove(position);
+                    Log.d("aaaaa",String.valueOf(position));
                     notifyDataSetChanged();
                     slideLayout.closeMenu();
                 }
@@ -214,6 +220,7 @@ public class NoteActivity extends Fragment {
         TextView texts;
         TextView contents;
         Button deletes;
+        LinearLayout linearLayout;
     }
 
 }

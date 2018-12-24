@@ -1,5 +1,9 @@
 package com.example.note.mynote;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +32,9 @@ public class MyActivity extends Fragment {
     private Button logins,changes,exits;
     private Intent intent;
     private boolean logined = false;
+    private ImageView imageView;
+    private Bitmap head;// 头像Bitmap
+    private static String path = "/sdcard/myHead/";// sd路径
 
     @Nullable
     @Override
@@ -60,7 +67,27 @@ public class MyActivity extends Fragment {
                 logined = false;
             }
         });
+        imageView = (ImageView) view.findViewById(R.id.image_view);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(logined){
+            Bitmap bt = BitmapFactory.decodeFile(path + "head.jpg");// 从SD卡中找头像，转换成Bitmap
+            if (bt != null) {
+                @SuppressWarnings("deprecation")
+                Drawable drawable = new BitmapDrawable(bt);// 转换成drawable
+                imageView.setImageDrawable(drawable);
+            }
+            else {
+                /**
+                 * 如果SD里面没有则需要从服务器取头像，取回来的头像再保存在SD中
+                 *
+                 */
+            }
+        }
     }
 
     @Override

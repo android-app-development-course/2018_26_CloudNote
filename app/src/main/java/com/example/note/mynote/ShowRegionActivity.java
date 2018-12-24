@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,11 @@ public class ShowRegionActivity extends AppCompatActivity {
         backs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intents = getIntent();
+                getText = intents.getStringExtra("sendValues");
+                Intent intent = new Intent();
+                intent.putExtra("backValues",getText);
+                setResult(1,intent);
                 finish();
             }
         });
@@ -52,6 +58,19 @@ public class ShowRegionActivity extends AppCompatActivity {
                 startActivityForResult(intent,1);
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK&&event.getRepeatCount()==0){
+            Intent intents = getIntent();
+            getText = intents.getStringExtra("sendValues");
+            Intent intent = new Intent();
+            intent.putExtra("backValues",getText);
+            setResult(1,intent);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
