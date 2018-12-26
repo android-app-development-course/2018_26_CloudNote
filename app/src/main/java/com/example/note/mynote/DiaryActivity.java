@@ -23,13 +23,15 @@ import java.util.ArrayList;
 public class DiaryActivity extends Fragment{
     private ListView diaryListView;
     private SimpleDateFormat simpleDateFormat;
-    private ArrayList<String> arrayTimes,arrayTitle,arrayContent;
+    private static ArrayList<String> arrayTimes,arrayTitle,arrayContent;
     private String titles="",values="",nowTime="";
     private String saveTitle="",saveValue="";
     private boolean selfChange = false;
+    private boolean doIt = false;
     private Intent intent;
     private MyBaseAdapter3 myBaseAdapter3;
     public  SlideLayout slideLayout = null;
+    private MyHelper myHelper;
 
     @Nullable
     @Override
@@ -47,6 +49,7 @@ public class DiaryActivity extends Fragment{
         diaryListView = (ListView) getActivity().findViewById(R.id.diarylv);
         myBaseAdapter3 = new MyBaseAdapter3();
         diaryListView.setAdapter(myBaseAdapter3);
+        myHelper = new MyHelper(getContext());
         initial();
     }
 
@@ -64,34 +67,33 @@ public class DiaryActivity extends Fragment{
         return;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        initial();
+    }
 
     private void initial(){
-        arrayTimes.add("2011-1-1");
-        arrayTitle.add("去长隆玩哈哈哈");
-        arrayContent.add("这里是去长隆玩哈哈哈");
-        arrayTimes.add("2011-2-2");
-        arrayTitle.add("白天鹅吃大餐");
-        arrayContent.add("这里是白天鹅吃大餐");
-        arrayTimes.add("2011-3-3");
-        arrayTitle.add("周末看复仇者联盟");
-        arrayContent.add("这里是周末看复仇者联盟");
-        arrayTimes.add("2011-4-4");
-        arrayTitle.add("不可告人的秘密");
-        arrayContent.add("这里是不可告人的秘密");
-        arrayTimes.add("2011-5-5");
-        arrayTitle.add("我和他");
-        arrayContent.add("这里是我和他");
-        arrayTimes.add("2011-6-6");
-        arrayTitle.add("森波拉公园");
-        arrayContent.add("这里是森波拉公园");
-        arrayTimes.add("2011-7-7");
-        arrayTitle.add("熬夜睡不着");
-        arrayContent.add("这里是熬夜睡不着");
+        myHelper.initial("Diary");
+        arrayTitle = myHelper.backValue1();
+        arrayContent = myHelper.backValue2();
+        arrayTimes = myHelper.backValue3();
+        myBaseAdapter3.notifyDataSetChanged();
+        return;
+    }
+
+    public ArrayList<String> backValue1(){
+        return arrayTitle;
+    }
+
+    public ArrayList<String> backValue2(){
+        return arrayContent;
     }
 
     public void updateListView(String title,String content){
         titles = title;
         values = content;
+        doIt = false;
         if(!titles.equals("")){
             simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             nowTime = simpleDateFormat.format(new java.util.Date());
@@ -101,6 +103,7 @@ public class DiaryActivity extends Fragment{
                         arrayTimes.remove(i);
                         arrayContent.remove(i);
                         arrayTitle.remove(i);
+                        doIt = true;
                         break;
                     }
                 }
@@ -109,6 +112,12 @@ public class DiaryActivity extends Fragment{
             arrayTimes.add(nowTime);
             arrayTitle.add(titles);
             arrayContent.add(values);
+            if(doIt){
+                myHelper.update(saveTitle,saveValue,titles,values,nowTime,"Diary");
+            }
+            else {
+                myHelper.insert(titles,values,nowTime,"Diary");
+            }
         }
         if(myBaseAdapter3 != null){
             myBaseAdapter3.notifyDataSetChanged();
@@ -170,6 +179,7 @@ public class DiaryActivity extends Fragment{
             holder.deletes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    myHelper.delete(arrayTitle.get(position),arrayContent.get(position),"Diary");
                     arrayContent.remove(position);
                     arrayTimes.remove(position);
                     arrayTitle.remove(position);

@@ -13,6 +13,14 @@
         <include layout="@layout/res_top"
             android:id="@+id/res_title"/>
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"/>
+
         <ImageView
             android:id="@+id/image_view"
             android:layout_width="48dp"
@@ -35,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="账号："/>
+                android:text="用户名："/>
 
             <EditText
                 android:id="@+id/account"
@@ -43,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:maxLength="15"
                 android:inputType="text"
-                android:hint="请输入账号..."/>
+                android:hint="请输入您的用户名..."/>
         </LinearLayout>
 
         <LinearLayout
@@ -113,7 +121,7 @@
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:maxLength="20"
-                android:inputType="text" />
+                android:inputType="textEmailAddress" />
 
         </LinearLayout>
 
