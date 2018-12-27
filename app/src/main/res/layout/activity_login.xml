@@ -21,14 +21,14 @@
         <include layout="@layout/title_layoutss"
             android:id="@+id/login_title"/>
 
-        <ImageView
+        <com.example.note.mynote.AvatarImageView
             android:id="@+id/login_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginTop="100dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/login_title"
-            android:background="@drawable/touxiang"/>
+            android:src="@drawable/touxiang"/>
 
         <LinearLayout
             android:id="@+id/login_account"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/login_image">
 
             <TextView
@@ -47,7 +47,7 @@
 
             <EditText
                 android:id="@+id/account"
-                android:layout_width="170dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:maxLength="20"
                 android:inputType="textEmailAddress"/>
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/login_account">
 
             <TextView
@@ -70,7 +70,7 @@
 
             <EditText
                 android:id="@+id/password"
-                android:layout_width="170dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:maxLength="15"
                 android:inputType="textPassword"/>

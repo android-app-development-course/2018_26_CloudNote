@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             android:visibility="invisible"/>
 
-        <ImageView
+        <com.example.note.mynote.AvatarImageView
             android:id="@+id/image_view"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/image_view">
 
             <TextView
@@ -47,7 +47,7 @@
 
             <EditText
                 android:id="@+id/account"
-                android:layout_width="170dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:maxLength="15"
                 android:inputType="text"
@@ -60,17 +60,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/res_account">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="密码：" />
+                android:text="   密码：" />
 
             <EditText
                 android:id="@+id/password"
-                android:layout_width="170dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:maxLength="15"
                 android:inputType="textPassword"
@@ -84,17 +84,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/res_password">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="密码：" />
+                android:text="   密码：" />
 
             <EditText
                 android:id="@+id/passwords"
-                android:layout_width="170dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:maxLength="15"
                 android:inputType="textPassword"
@@ -108,20 +108,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/res_passwords">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="邮箱：" />
+                android:text="   邮箱：" />
 
             <EditText
                 android:id="@+id/emails"
-                android:layout_width="170dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:maxLength="20"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:hint="请输入邮箱..."/>
 
         </LinearLayout>
 
@@ -131,7 +132,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/res_email">
 
             <TextView
@@ -141,10 +142,11 @@
 
             <EditText
                 android:id="@+id/passworded"
-                android:layout_width="157dp"
+                android:layout_width="145dp"
                 android:layout_height="wrap_content"
                 android:maxLength="15"
-                android:inputType="textPassword" />
+                android:inputType="text"
+                android:hint="请输入验证码..."/>
 
             <TextView
                 android:id="@+id/vtf_text"

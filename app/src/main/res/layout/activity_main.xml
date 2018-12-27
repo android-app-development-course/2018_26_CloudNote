@@ -12,14 +12,16 @@
         android:layout_height="match_parent">
 
         <include layout="@layout/title_layout"
-            android:id="@+id/topTitle"></include>
+            android:id="@+id/topTitle">
+        </include>
 
         <LinearLayout
             android:id="@+id/mainView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/topTitle"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+        </LinearLayout>
 
 
     </RelativeLayout>

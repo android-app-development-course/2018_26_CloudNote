@@ -13,7 +13,7 @@
             android:layout_width="80dp"
             android:layout_height="75dp"
             android:layout_margin="3dp"
-            android:background="@mipmap/note" />
+            android:background="@mipmap/diary" />
 
         <LinearLayout
             android:layout_width="wrap_content"
