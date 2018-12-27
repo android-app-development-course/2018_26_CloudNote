@@ -10,17 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"/>
+
         <include layout="@layout/title_layoutss"
             android:id="@+id/login_title"/>
 
-        <ImageView
+        <com.example.note.mynote.AvatarImageView
             android:id="@+id/login_image"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="60dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="100dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/login_title"
-            android:background="@mipmap/ic_launcher_round"/>
+            android:src="@drawable/touxiang"/>
 
         <LinearLayout
             android:id="@+id/login_account"
@@ -28,21 +36,21 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/login_image">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="账号："/>
+                android:text="邮箱："/>
 
             <EditText
                 android:id="@+id/account"
-                android:layout_width="170dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:maxLength="15"
-                android:inputType="text"/>
+                android:maxLength="20"
+                android:inputType="textEmailAddress"/>
         </LinearLayout>
 
         <LinearLayout
@@ -51,7 +59,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="60dp"
             android:layout_below="@id/login_account">
 
             <TextView
@@ -62,7 +70,7 @@
 
             <EditText
                 android:id="@+id/password"
-                android:layout_width="170dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:maxLength="15"
                 android:inputType="textPassword"/>
@@ -74,6 +82,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="登录"
+            android:background="@color/colorPrimaryDark"
             android:layout_below="@id/login_password"
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"/>

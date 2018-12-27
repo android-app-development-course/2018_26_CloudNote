@@ -41,6 +41,9 @@ public class PersonalMsg extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 str = editText.getText().toString();
+                if(str.equals("")){
+                    str = "这个人很懒,什么也没有写...";
+                }
                 Intent intent = new Intent();
                 intent.putExtra("introduce",str);
                 setResult(0,intent);

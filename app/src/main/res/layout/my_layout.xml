@@ -3,23 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+
+    <FrameLayout
+        android:id="@+id/FL_wave"
+        android:layout_width="match_parent"
+        android:layout_height="140dp">
+
+        <com.example.note.mynote.AvatarImageView
+            android:id="@+id/image_view"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/touxiang" />
+
+        <com.example.note.mynote.WaveView3
+            android:id="@+id/wave_view"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_marginTop="130dp"
+            android:background="@color/colorPrimaryDark" />
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:background="@mipmap/ic_launcher_round"
-        />
+        android:layout_centerVertical="true"
+        android:visibility="invisible" />
 
     <ListView
         android:id="@+id/mylv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image_view"
-        android:layout_marginTop="40dp"
+        android:layout_below="@+id/FL_wave"
+        android:layout_marginTop="10dp"
         android:divider="#d9d9d9"
-        android:dividerHeight="10dp"></ListView>
+        android:dividerHeight="10dp">
+    </ListView>
 
     <LinearLayout
         android:id="@+id/liner_layout"
@@ -37,13 +60,14 @@
             android:fontFamily="serif"
             android:includeFontPadding="true"
             android:layout_gravity="center"
-            android:textColor="@android:color/black"/>
+            android:background="@color/colorPrimaryDark"/>
 
         <Button
             android:id="@+id/change_button"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:text="切换账户"
+            android:background="@color/colorPrimaryDark"
             android:fontFamily="serif"
             android:includeFontPadding="true"
             android:layout_gravity="center"
@@ -58,6 +82,7 @@
             android:layout_height="wrap_content"
             android:visibility="invisible"
             android:text="退出登录"
+            android:background="@color/colorPrimaryDark"
             android:textColor="@android:color/holo_red_light"/>
 
     </LinearLayout>

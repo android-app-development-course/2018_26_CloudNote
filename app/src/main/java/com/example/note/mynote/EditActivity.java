@@ -55,6 +55,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.save:
                 titles = editTitle.getText().toString();
                 contents = editText.getText().toString();
+                Log.d("ssss",titles);
+                Log.d("ssss",contents);
                 num = intent.getIntExtra("number",-1);
                 intent.putExtra("title",titles);
                 intent.putExtra("content",contents);

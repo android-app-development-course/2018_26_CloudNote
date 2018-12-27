@@ -6,15 +6,16 @@
     <include layout="@layout/msg_title"
         android:id="@+id/msg_title"/>
 
-    <ImageView
+    <com.example.note.mynote.AvatarImageView
         android:id="@+id/msg_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/msg_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:background="@mipmap/ic_launcher_round"
-        />
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/touxiang"/>
 
     <ListView
         android:id="@+id/msg_lv"
@@ -24,6 +25,7 @@
         android:layout_marginTop="40dp"
         android:padding="5dp"
         android:divider="#d9d9d9"
-        android:dividerHeight="10dp"></ListView>
+        android:dividerHeight="10dp">
+    </ListView>
 
 </RelativeLayout>

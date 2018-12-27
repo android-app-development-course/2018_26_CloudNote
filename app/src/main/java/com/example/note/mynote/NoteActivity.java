@@ -26,14 +26,15 @@ import java.util.ArrayList;
 public class NoteActivity extends Fragment {
     private ListView noteListView;
     private SimpleDateFormat simpleDateFormat;
-    private ArrayList<String> arrayTimes,arrayTitle,arrayContent;
+    private static ArrayList<String> arrayTimes,arrayTitle,arrayContent;
     private String titles="",values="",nowTime="";
     private Intent intent;
     private MyBaseAdapter1 baseAdapter1;
-    private boolean selfChange = false;
+    private boolean selfChange = false,doIt = false;
     private String saveTitle="",saveValue="";
     public  SlideLayout slideLayout = null;
-    private LinearLayout linearLayout;
+    private int locate = 0;
+    private MyHelper myHelper;
 
     @Nullable
     @Override
@@ -52,6 +53,13 @@ public class NoteActivity extends Fragment {
         noteListView = (ListView) getActivity().findViewById(R.id.notelv);
         baseAdapter1 = new MyBaseAdapter1();
         noteListView.setAdapter(baseAdapter1);
+        myHelper = new MyHelper(getContext());
+        initial();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         initial();
     }
 
@@ -69,33 +77,27 @@ public class NoteActivity extends Fragment {
         return;
     }
 
+    public ArrayList<String> backValue1(){
+        return arrayTitle;
+    }
+
+    public ArrayList<String> backValue2(){
+        return arrayContent;
+    }
+
     private void initial(){
-        arrayTimes.add("2011-1-1");
-        arrayTitle.add("化学课堂笔记");
-        arrayContent.add("这里是化学课堂笔记");
-        arrayTimes.add("2011-2-2");
-        arrayTitle.add("小抄");
-        arrayContent.add("这里是我的小抄");
-        arrayTimes.add("2011-3-3");
-        arrayTitle.add("考试重点");
-        arrayContent.add("这里是考试重点");
-        arrayTimes.add("2011-4-4");
-        arrayTitle.add("各科考纲");
-        arrayContent.add("这里是各科考纲");
-        arrayTimes.add("2011-5-5");
-        arrayTitle.add("错题记录");
-        arrayContent.add("这里是错题记录");
-        arrayTimes.add("2011-6-6");
-        arrayTitle.add("复习资料整理");
-        arrayContent.add("这里是复习资料整理");
-        arrayTimes.add("2011-7-7");
-        arrayTitle.add("语文四字词");
-        arrayContent.add("这里是语文四字词");
+        myHelper.initial("Note");
+        arrayTitle = myHelper.backValue1();
+        arrayContent = myHelper.backValue2();
+        arrayTimes = myHelper.backValue3();
+        baseAdapter1.notifyDataSetChanged();
+        return;
     }
 
     public void updateListView(String title,String content){
         titles = title;
         values = content;
+        doIt = false;
         if(!titles.equals("")){
             simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             nowTime = simpleDateFormat.format(new java.util.Date());
@@ -105,6 +107,7 @@ public class NoteActivity extends Fragment {
                         arrayTimes.remove(i);
                         arrayContent.remove(i);
                         arrayTitle.remove(i);
+                        doIt = true;
                         break;
                     }
                 }
@@ -113,6 +116,12 @@ public class NoteActivity extends Fragment {
             arrayTimes.add(nowTime);
             arrayTitle.add(titles);
             arrayContent.add(values);
+            if(doIt){
+                myHelper.update(saveTitle,saveValue,titles,values,nowTime,"Note");
+            }
+            else{
+                myHelper.insert(titles,values,nowTime,"Note");
+            }
         }
         if(baseAdapter1 != null){
             baseAdapter1.notifyDataSetChanged();
@@ -150,7 +159,7 @@ public class NoteActivity extends Fragment {
                 holder.texts = (TextView) convertView.findViewById(R.id.list_text);
                 holder.contents = (TextView) convertView.findViewById(R.id.list_texts);
                 holder.deletes = (Button) convertView.findViewById(R.id.delete_button);
-                linearLayout = (LinearLayout) convertView.findViewById(R.id.contents);
+                holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.contents);
                 convertView.setTag(holder);
             }
             else{
@@ -158,7 +167,8 @@ public class NoteActivity extends Fragment {
             }
             holder.texts.setText(arrayTimes.get(position));
             holder.contents.setText(arrayTitle.get(position));
-            linearLayout.setOnClickListener(new View.OnClickListener() {
+
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     titles = arrayTitle.get(position);
@@ -174,6 +184,7 @@ public class NoteActivity extends Fragment {
             holder.deletes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    myHelper.delete(arrayTitle.get(position),arrayContent.get(position),"Note");
                     arrayContent.remove(position);
                     arrayTimes.remove(position);
                     arrayTitle.remove(position);
@@ -214,6 +225,7 @@ public class NoteActivity extends Fragment {
         TextView texts;
         TextView contents;
         Button deletes;
+        LinearLayout linearLayout;
     }
 
 }
