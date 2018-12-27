@@ -5,11 +5,11 @@
     android:background="@color/colorPrimaryDark">
 
     <Button
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:id="@+id/title_left"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="8dp"
         android:background="@drawable/ic_event_available_black_24dp"/>
 
     <TextView
@@ -17,15 +17,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="MyNote"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textColor="@android:color/white"
-        android:layout_marginLeft="133dp"/>
+        android:layout_marginLeft="125dp"/>
     <Button
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:id="@+id/title_right"
         android:layout_gravity="center"
-        android:layout_marginLeft="125dp"
+        android:layout_marginLeft="108dp"
         android:background="@drawable/ic_add_black_24dp"/>
 
 </LinearLayout>

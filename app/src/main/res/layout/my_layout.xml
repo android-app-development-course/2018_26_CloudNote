@@ -7,7 +7,8 @@
     <FrameLayout
         android:id="@+id/FL_wave"
         android:layout_width="match_parent"
-        android:layout_height="140dp">
+        android:layout_height="110dp"
+        android:background="@color/colorPrimaryDark">
 
         <com.example.note.mynote.AvatarImageView
             android:id="@+id/image_view"
@@ -15,15 +16,15 @@
             android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:layout_marginStart="170dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:src="@drawable/touxiang" />
 
         <com.example.note.mynote.WaveView3
             android:id="@+id/wave_view"
             android:layout_width="match_parent"
             android:layout_height="15dp"
-            android:layout_marginTop="130dp"
-            android:background="@color/colorPrimaryDark" />
+            android:layout_marginTop="100dp"
+            android:background="#ADD8E6" />
     </FrameLayout>
 
     <ProgressBar
@@ -41,14 +42,14 @@
         android:layout_below="@+id/FL_wave"
         android:layout_marginTop="10dp"
         android:divider="#d9d9d9"
-        android:dividerHeight="10dp">
+        android:dividerHeight="2dp">
     </ListView>
 
     <LinearLayout
         android:id="@+id/liner_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:layout_below="@id/mylv">
 

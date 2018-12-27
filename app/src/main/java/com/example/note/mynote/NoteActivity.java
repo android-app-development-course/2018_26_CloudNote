@@ -45,6 +45,14 @@ public class NoteActivity extends Fragment {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            initial();
+        }
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         arrayTitle = new ArrayList<String>();
@@ -60,6 +68,7 @@ public class NoteActivity extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        System.out.println("idoit");
         initial();
     }
 
