@@ -11,12 +11,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -50,7 +52,8 @@ public class MyActivity extends Fragment {
     private Button logins,changes,exits;
     private Intent intent;
     private boolean logined = false;
-    private ImageView imageView;
+    private ImageView imageView;//头像
+    private WaveView3 waveView;//波浪动画
     private NoteActivity noteActivity;
     private DiaryActivity diaryActivity;
     private ArrayList<String> arrayList1,arrayList2;
@@ -65,6 +68,18 @@ public class MyActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.my_layout,container,false);
+
+        waveView = (WaveView3) view.findViewById(R.id.wave_view);//动态波浪代码开始
+        final FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2,-2);
+        lp.gravity = Gravity.BOTTOM|Gravity.CENTER;
+        waveView.setOnWaveAnimationListener(new WaveView3.OnWaveAnimationListener() {
+            @Override
+            public void OnWaveAnimation(float y) {
+                lp.setMargins(0,0,0,(int)y+2);
+                imageView.setLayoutParams(lp);
+            }
+        });//动态波浪代码结束
+
         logins = (Button) view.findViewById(R.id.login_in);
         logins.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +131,7 @@ public class MyActivity extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
+        View view;
         super.onActivityCreated(savedInstanceState);
         arrayList1 = new ArrayList<>();
         arrayList2 = new ArrayList<>();

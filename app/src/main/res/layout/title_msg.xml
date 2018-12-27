@@ -20,6 +20,6 @@
         android:text="消息中心"
         android:textSize="20dp"
         android:textColor="@android:color/white"
-        android:layout_marginLeft="145dp"/>
+        android:layout_marginLeft="125dp"/>
 
 </LinearLayout>

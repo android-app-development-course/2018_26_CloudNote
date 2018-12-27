@@ -150,7 +150,7 @@ public class DiaryActivity extends Fragment{
         public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             if(convertView==null){
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.lv_list,parent,false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.lv_list_diary,parent,false);
                 holder = new ViewHolder();
                 holder.texts = (TextView) convertView.findViewById(R.id.list_text);
                 holder.contents = (TextView) convertView.findViewById(R.id.list_texts);

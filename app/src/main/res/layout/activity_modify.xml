@@ -15,12 +15,11 @@
         <ImageView
             android:id="@+id/image_views"
             android:layout_below="@id/modifyTitle"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/touxiang"
-            />
+            android:layout_marginTop="40dp"
+            android:background="@drawable/ic_security_black_24dp" />
 
         <TextView
             android:id="@+id/passwordLabel"

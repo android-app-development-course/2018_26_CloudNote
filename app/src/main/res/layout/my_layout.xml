@@ -3,14 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/image_view"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/touxiang"
-        />
+
+    <FrameLayout
+        android:id="@+id/FL_wave"
+        android:layout_width="match_parent"
+        android:layout_height="140dp">
+
+        <com.example.note.mynote.AvatarImageView
+            android:id="@+id/image_view"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="170dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/touxiang" />
+
+        <com.example.note.mynote.WaveView3
+            android:id="@+id/wave_view"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_marginTop="130dp"
+            android:background="@color/colorPrimaryDark" />
+    </FrameLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -18,16 +32,17 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <ListView
         android:id="@+id/mylv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image_view"
-        android:layout_marginTop="40dp"
+        android:layout_below="@+id/FL_wave"
+        android:layout_marginTop="10dp"
         android:divider="#d9d9d9"
-        android:dividerHeight="10dp"></ListView>
+        android:dividerHeight="10dp">
+    </ListView>
 
     <LinearLayout
         android:id="@+id/liner_layout"

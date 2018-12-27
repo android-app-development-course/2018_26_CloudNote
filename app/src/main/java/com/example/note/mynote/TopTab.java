@@ -107,23 +107,23 @@ public class TopTab extends AppCompatActivity {
         title.add("1004惹的祸");
         content.add("回顾百期，我们整理了一份特别的礼物，一周微信收藏100期特别排行榜");
         time.add("2018-12-12");
-        title.add("1004惹的祸");
-        content.add("回顾百期，我们整理了一份特别的礼物，一周微信收藏101期特别排行榜");
-        time.add("2018-12-13");
-        title.add("1004惹的祸");
-        content.add("回顾百期，我们整理了一份特别的礼物，一周微信收藏102期特别排行榜");
-        time.add("2018-12-14");
+        title.add("马云爸爸发红包啦！");
+        content.add("打开支付宝首页搜“570321008”领红包，领到大红包的小伙伴赶紧使用哦！");
+        time.add("2018-12-24");
+        title.add("要想抓住TA的心，得先抓住TA的胃！");
+        content.add("米家新品小饭煲，要比情敌先下手！");
+        time.add("2018-12-26");
         titles = new ArrayList<String>();
         contents = new ArrayList<String>();
         times = new ArrayList<String>();
         titles.add("1005发生的大事");
         contents.add("这周有大事要发生了呢，哈哈哈哈");
         times.add("2018-11-11");
-        titles.add("1005发生的大事");
-        contents.add("下周有大事要发生了呢，哈哈哈哈");
-        times.add("2018-11-12");
-        titles.add("1005发生的大事");
-        contents.add("下下周有大事要发生了呢，哈哈哈哈");
+        titles.add("有人@你");
+        contents.add("点击回复");
+        times.add("2018-12-12");
+        titles.add("[MyNote]新款App上架啦！");
+        contents.add("给你全新的笔记APP体验，是兄弟，就来下载我！");
         times.add("2018-11-13");
     }
 

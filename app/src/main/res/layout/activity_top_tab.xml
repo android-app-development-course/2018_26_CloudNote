@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/msg_title"
+        <include layout="@layout/title_msg"
             android:id="@+id/top_title"/>
 
         <android.support.design.widget.TabLayout
