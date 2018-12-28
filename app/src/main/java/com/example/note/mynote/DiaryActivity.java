@@ -73,6 +73,14 @@ public class DiaryActivity extends Fragment{
         initial();
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            initial();
+        }
+    }
+
     private void initial(){
         myHelper.initial("Diary");
         arrayTitle = myHelper.backValue1();

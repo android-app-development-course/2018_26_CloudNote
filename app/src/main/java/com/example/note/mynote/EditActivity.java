@@ -55,8 +55,11 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.save:
                 titles = editTitle.getText().toString();
                 contents = editText.getText().toString();
-                Log.d("ssss",titles);
-                Log.d("ssss",contents);
+                titles = titles.trim();
+                if(titles.equals("")){
+                    Toast.makeText(getApplicationContext(),"标题不能为空！",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 num = intent.getIntExtra("number",-1);
                 intent.putExtra("title",titles);
                 intent.putExtra("content",contents);

@@ -13,11 +13,13 @@ import android.widget.*;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreConnectionPNames;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -58,21 +60,17 @@ public class LoginActivity extends AppCompatActivity {
                 accounts = account.getText().toString();
                 passwords = password.getText().toString();
                 progressBar.setVisibility(View.VISIBLE);
+                result = "";
                 post();
                 progressBar.setVisibility(View.INVISIBLE);
-                if(result.equals("")){
+                if(!(result.equals("1"))&&!(result.equals("0"))){
                     Toast.makeText(getApplicationContext(),"连接超时",Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if(result.equals("1")){
                     Toast.makeText(getApplicationContext(),"登录成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(),MyActivity.class);
-                    SharedPreferences sharedPreferences = getSharedPreferences("store",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("acc",accounts);
-                    editor.putString("psw",passwords);
-                    editor.commit();
-                    System.out.println("send="+accounts);
-                    System.out.println("send="+passwords);
+                    myHelper.insertes(accounts,passwords);
                     setResult(4,intent);
                     myHelper.initials();
                     msg = myHelper.backValue4();
@@ -135,28 +133,37 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 String path = "http://118.24.233.201:3000/login";
                 //1.创建客户端对象
-                HttpClient hc = new DefaultHttpClient();
-                //2.创建post请求对象
-                HttpPost hp = new HttpPost(path);
+                try{
+                    HttpClient hc = new DefaultHttpClient();
+                    //2.创建post请求对象
+                    HttpPost hp = new HttpPost(path);
 
-                //封装form表单提交的数据
-                BasicNameValuePair bnvp = new BasicNameValuePair("email", name);
-                BasicNameValuePair bnvp2 = new BasicNameValuePair("password", pass);
-                List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
-                //把BasicNameValuePair放入集合中
-                parameters.add(bnvp);
-                parameters.add(bnvp2);
+                    //封装form表单提交的数据
+                    BasicNameValuePair bnvp = new BasicNameValuePair("email", name);
+                    BasicNameValuePair bnvp2 = new BasicNameValuePair("password", pass);
+                    List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
+                    //把BasicNameValuePair放入集合中
+                    parameters.add(bnvp);
+                    parameters.add(bnvp2);
 
-                try {
-                    //要提交的数据都已经在集合中了，把集合传给实体对象
-                    UrlEncodedFormEntity entity = new UrlEncodedFormEntity(parameters, "utf-8");
-                    //设置post请求对象的实体，其实就是把要提交的数据封装至post请求的输出流中
-                    hp.setEntity(entity);
-                    //3.使用客户端发送post请求
-                    HttpResponse hr = hc.execute(hp);
-                    showResponseResult(hr);
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    try {
+                        //要提交的数据都已经在集合中了，把集合传给实体对象
+                        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(parameters, "utf-8");
+                        //设置post请求对象的实体，其实就是把要提交的数据封装至post请求的输出流中
+                        hp.setEntity(entity);
+                        hc.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 3000);
+                        hc.getParams().setParameter(
+                                CoreConnectionPNames.SO_TIMEOUT, 3000);
+                        //3.使用客户端发送post请求
+                        HttpResponse hr = hc.execute(hp);
+                        if (hr.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                            showResponseResult(hr);
+                        }
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             }

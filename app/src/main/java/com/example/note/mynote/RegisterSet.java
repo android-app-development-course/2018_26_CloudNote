@@ -17,11 +17,13 @@ import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreConnectionPNames;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -92,12 +94,12 @@ public class RegisterSet extends AppCompatActivity {
         string3 = editText3.getText().toString();
         string4 = editText4.getText().toString();
         myEmail = editText5.getText().toString();
-        string1.trim();
-        string2.trim();
-        string3.trim();
-        string4.trim();
-        string6.trim();
-        myEmail.trim();
+        string1 = string1.trim();
+        string2 = string2.trim();
+        string3 = string3.trim();
+        string4 = string4.trim();
+        string6 = string6.trim();
+        myEmail = myEmail.trim();
         if(string1.equals("")||string2.equals("")||string3.equals("")||string4.equals("")||myEmail.equals("")){
             Toast.makeText(getApplicationContext(),"输入不能为空",Toast.LENGTH_SHORT).show();
             return;
@@ -113,12 +115,14 @@ public class RegisterSet extends AppCompatActivity {
             initial();
             return;
         }
+        result = "";
         progressBar.setVisibility(View.VISIBLE);
         post();
         progressBar.setVisibility(View.INVISIBLE);
         System.out.println("result="+result);
-        if(result.equals("")){
+        if(!(result.equals("1"))&&!(result.equals("0"))){
             Toast.makeText(getApplicationContext(),"连接超时",Toast.LENGTH_SHORT).show();
+            return;
         }
         if(result.equals("0")){
             Toast.makeText(getApplicationContext(),"账号已存在",Toast.LENGTH_SHORT).show();
@@ -160,31 +164,40 @@ public class RegisterSet extends AppCompatActivity {
             @Override
             public void run() {
                 String path = "http://118.24.233.201:3000/register";
-                //1.创建客户端对象
-                HttpClient hc = new DefaultHttpClient();
-                //2.创建post请求对象
-                HttpPost hp = new HttpPost(path);
+                try{
+                    //1.创建客户端对象
+                    HttpClient hc = new DefaultHttpClient();
+                    //2.创建post请求对象
+                    HttpPost hp = new HttpPost(path);
 
-                //封装form表单提交的数据
-                BasicNameValuePair bnvp = new BasicNameValuePair("name", name);
-                BasicNameValuePair bnvp2 = new BasicNameValuePair("password", pass);
-                BasicNameValuePair bnvp3 = new BasicNameValuePair("email", email);
-                List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
-                //把BasicNameValuePair放入集合中
-                parameters.add(bnvp);
-                parameters.add(bnvp2);
-                parameters.add(bnvp3);
+                    //封装form表单提交的数据
+                    BasicNameValuePair bnvp = new BasicNameValuePair("name", name);
+                    BasicNameValuePair bnvp2 = new BasicNameValuePair("password", pass);
+                    BasicNameValuePair bnvp3 = new BasicNameValuePair("email", email);
+                    List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
+                    //把BasicNameValuePair放入集合中
+                    parameters.add(bnvp);
+                    parameters.add(bnvp2);
+                    parameters.add(bnvp3);
 
-                try {
-                    //要提交的数据都已经在集合中了，把集合传给实体对象
-                    UrlEncodedFormEntity entity = new UrlEncodedFormEntity(parameters, "utf-8");
-                    //设置post请求对象的实体，其实就是把要提交的数据封装至post请求的输出流中
-                    hp.setEntity(entity);
-                    //3.使用客户端发送post请求
-                    HttpResponse hr = hc.execute(hp);
-                    showResponseResult(hr);
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    try {
+                        //要提交的数据都已经在集合中了，把集合传给实体对象
+                        UrlEncodedFormEntity entity = new UrlEncodedFormEntity(parameters, "utf-8");
+                        //设置post请求对象的实体，其实就是把要提交的数据封装至post请求的输出流中
+                        hp.setEntity(entity);
+                        hc.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 3000);
+                        hc.getParams().setParameter(
+                                CoreConnectionPNames.SO_TIMEOUT, 3000);
+                        //3.使用客户端发送post请求
+                        HttpResponse hr = hc.execute(hp);
+                        if (hr.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                            showResponseResult(hr);
+                        }
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }catch (Exception e){
                     e.printStackTrace();
                 }
             }

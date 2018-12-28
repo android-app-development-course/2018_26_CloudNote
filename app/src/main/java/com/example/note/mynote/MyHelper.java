@@ -16,7 +16,7 @@ public class MyHelper extends SQLiteOpenHelper {
     private ArrayList<String> arrayList4;
 
     public MyHelper(Context context){
-        super(context,"itCasts.db",null,1);
+        super(context,"itCastes.db",null,1);
         arrayList1 = new ArrayList<String>();
         arrayList2 = new ArrayList<String>();
         arrayList3 = new ArrayList<String>();
@@ -28,6 +28,8 @@ public class MyHelper extends SQLiteOpenHelper {
                 "content TEXT, time VARCHAR(20), tag VARCHAR(20))");
         db.execSQL("CREATE TABLE message(_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20)," +
                 "sexual VARCHAR(10), phone VARCHAR(100), locate VARCHAR(20), introduce TEXT)");
+        db.execSQL("CREATE TABLE login(_id INTEGER PRIMARY KEY AUTOINCREMENT, account VARCHAR(30), " +
+                "password VARCHAR(30))");
     }
 
     public void onUpgrade(SQLiteDatabase db,int oldVersion,int newVersion){
@@ -80,6 +82,57 @@ public class MyHelper extends SQLiteOpenHelper {
             values.put("introduce","暂无");
         }
         long id = db.insert("message",null,values);
+        db.close();
+        return;
+    }
+
+    public void insertes(String account,String password){
+        ContentValues values = new ContentValues();
+        values.put("account",account);
+        values.put("password",password);
+        ArrayList<String> arrayListes = finds();
+        if(arrayListes!=null&&!arrayListes.isEmpty()){
+            SQLiteDatabase db = getWritableDatabase();
+            String acc = arrayListes.get(0);
+            String psw = arrayListes.get(1);
+            db.update("login",values,"account=? and password=?",new String[]{acc,psw});
+            db.close();
+        }
+        else{
+            SQLiteDatabase db = getWritableDatabase();
+            long id = db.insert("login",null,values);
+            db.close();
+        }
+        return;
+    }
+
+    public void replace(String title,String content,String time,String label){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title",title);
+        values.put("content",content);
+        boolean exist = false;
+        String string1="",string2="";
+        Cursor cursor = db.rawQuery("select * from note where tag='" + label + "'",null);
+        while(cursor.moveToNext()){
+            string1 = cursor.getString(cursor.getColumnIndex("title"));
+            string2 = cursor.getString(cursor.getColumnIndex("content"));
+            if(string1.equals(title)&&string2.equals(content)){
+                exist = true;
+            }
+        }
+        if(!exist){
+            SQLiteDatabase dbs = getWritableDatabase();
+            ContentValues value1 = new ContentValues();
+            value1.put("title",title);
+            value1.put("content",content);
+            value1.put("time",time);
+            value1.put("tag",label);
+            //System.out.println("database="+title);
+            long id = dbs.insert("note",null,value1);
+            dbs.close();
+        }
+        cursor.close();
         db.close();
         return;
     }
@@ -147,6 +200,20 @@ public class MyHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return;
+    }
+
+    public ArrayList<String> finds(){
+        ArrayList<String> arrayList5 = new ArrayList<String>();
+        arrayList5.clear();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from login",null);
+        while(cursor.moveToNext()){
+            arrayList5.add(cursor.getString(cursor.getColumnIndex("account")));
+            arrayList5.add(cursor.getString(cursor.getColumnIndex("password")));
+        }
+        cursor.close();
+        db.close();
+        return arrayList5;
     }
 
     public void delete(String title,String content,String label){
