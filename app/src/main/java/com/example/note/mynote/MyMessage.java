@@ -2,20 +2,26 @@ package com.example.note.mynote;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -66,6 +72,12 @@ public class MyMessage extends AppCompatActivity {
     private  String IMAGE_FILE_NAME = "heads.jpg";
     private  String HeadPortrait_PATH;
     private int REQUEST_TAKE_PHOTO_PERMISSION = 1;
+    private File mTmpFile;
+    private File mCropImageFile;
+    private String myFile = "/storage/emulated/0/Android/data/com.example.note.mynote/cache/";
+    private static final int     REQUEST_CAMERA                                  = 100;
+    private static final int     REQUEST_GALLERY                                 = 101;
+    private static final int     REQUEST_CROP                                    = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,16 +163,14 @@ public class MyMessage extends AppCompatActivity {
             tv_select_gallery.setOnClickListener(new View.OnClickListener() {// 在相册中选取
                 @Override
                 public void onClick(View v) {
-                    HeadPortrait_PATH = Environment.getExternalStorageDirectory() + "/test/" + IMAGE_FILE_NAME ;
-                    choseHeadImageFromGallery();
+                    gallery();
                     dialog.dismiss();
                 }
             });
             tv_select_camera.setOnClickListener(new View.OnClickListener() {// 调用照相机
                 @Override
                 public void onClick(View v) {
-                    HeadPortrait_PATH = Environment.getExternalStorageDirectory() + "/test/" + IMAGE_FILE_NAME ;
-                    choseHeadImageFromCameraCapture();
+                    camera();
                     dialog.dismiss();
                 }
             });
@@ -171,10 +181,34 @@ public class MyMessage extends AppCompatActivity {
         dialog.show();
     }
 
+    private void gallery(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, REQUEST_GALLERY);
+    }
+
+    private void camera(){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            mTmpFile = new File(FileUtils.createRootPath(getBaseContext()) + "/" + "heads.jpg");
+            System.out.println("filepathss="+mTmpFile);
+            FileUtils.createFile(mTmpFile);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        FileProvider.getUriForFile(getBaseContext(), BuildConfig.APPLICATION_ID + ".provider", mTmpFile));
+            }else {
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTmpFile));
+            }
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTmpFile));
+            startActivityForResult(cameraIntent, REQUEST_CAMERA);
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        Bitmap bt = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+"/test/" + "heads.jpg");// 从SD卡中找头像，转换成Bitmap
+        Bitmap bt = BitmapFactory.decodeFile(myFile + "heads.jpg");// 从SD卡中找头像，转换成Bitmap
         if (bt != null) {
             @SuppressWarnings("deprecation")
             Drawable drawable = new BitmapDrawable(bt);// 转换成drawable
@@ -188,112 +222,6 @@ public class MyMessage extends AppCompatActivity {
              */
         }
         initial();
-    }
-
-    // 启动手机相机拍摄照片作为头像
-    private void choseHeadImageFromCameraCapture() {
-        //6.0以上动态获取权限
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            //申请权限，REQUEST_TAKE_PHOTO_PERMISSION是自定义的常量
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    REQUEST_TAKE_PHOTO_PERMISSION);
-
-        } else {
-            Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            // 判断存储卡是否可用，存储照片文件
-            if (hasSdcard()) {
-
-                intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-                        .fromFile(new File(Environment
-                                .getExternalStorageDirectory(), IMAGE_FILE_NAME)));
-            }
-            startActivityForResult(intentFromCapture, CODE_CAMERA_REQUEST);
-        }
-
-    }
-
-    // 从本地相册选取图片作为头像
-    private void choseHeadImageFromGallery() {
-        Intent intentFromGallery = new Intent();
-        // 设置文件类型
-        intentFromGallery.setType("image/*");
-        intentFromGallery.setAction(Intent.ACTION_PICK);
-        startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
-    }
-
-    /**
-     * 裁剪原始的图片
-     */
-    public void cropRawPhoto(Uri uri) {
-
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-
-        // 设置裁剪
-        intent.putExtra("crop", "true");
-
-        // aspectX , aspectY :宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-
-        // outputX , outputY : 裁剪图片宽高
-        intent.putExtra("outputX", output_X);
-        intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
-
-        startActivityForResult(intent, CODE_RESULT_REQUEST);
-    }
-    /**
-     * 提取保存裁剪之后的图片数据，并设置头像部分的View
-     */
-    private void setImageToHeadView(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            photo = extras.getParcelable("data");
-//            photo = intent.getParcelableExtra("data");
-            imageView.setImageBitmap(photo);
-            imageView.setBackground(null);
-            File nf = new File(Environment.getExternalStorageDirectory()+"/test");
-            nf.mkdir();
-            //在根目录下面的ASk文件夹下 创建okkk.jpg文件
-            File f = new File(Environment.getExternalStorageDirectory()+"/test", IMAGE_FILE_NAME);
-            FileOutputStream out = null;
-            try {      //打开输出流 将图片数据填入文件中
-                out = new FileOutputStream(f);
-                photo.compress(Bitmap.CompressFormat.PNG, 90, out);
-
-                try {
-                    out.flush();
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            File file = new File(HeadPortrait_PATH);
-            if (!file.exists()){
-                Toast.makeText(getApplicationContext(),"文件不存在",Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_TAKE_PHOTO_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //申请成功，可以拍照
-                choseHeadImageFromCameraCapture();
-            } else {
-                Toast.makeText(getApplicationContext(),"你拒绝了权限，该功能不可用\n可在应用设置里授权拍照哦",Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     public void initial(){
@@ -326,36 +254,125 @@ public class MyMessage extends AppCompatActivity {
 //            Toast.makeText(getApplication(), "取消", Toast.LENGTH_LONG).show();
             return;
         }
-        switch (requestCode) {
-            case CODE_GALLERY_REQUEST:
-                cropRawPhoto(data.getData());
-                break;
-
-            case CODE_CAMERA_REQUEST:
-                if (hasSdcard()) {
-                    File tempFile = new File(
-                            Environment.getExternalStorageDirectory(),
-                            IMAGE_FILE_NAME);
-                    cropRawPhoto(Uri.fromFile(tempFile));
-                } else {
-                    Toast.makeText(getApplicationContext(),"没有sd卡",Toast.LENGTH_SHORT).show();
+        switch (requestCode){
+            case REQUEST_CAMERA:
+                if (resultCode == RESULT_OK){
+                    crop(mTmpFile.getAbsolutePath());
+                }else {
+                    Toast.makeText(this, "拍照失败", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
 
-            case CODE_RESULT_REQUEST:
-                if (data != null) {
-                    setImageToHeadView(data);
-                    File file = new File(
-                            Environment.getExternalStorageDirectory(),
-                            IMAGE_FILE_NAME);
-                    if (file.exists()&&!file.isDirectory()){
-                        file.delete();
-                    }
+            case REQUEST_CROP:
+                if (resultCode == RESULT_OK){
+                    imageView.setImageURI(Uri.fromFile(mCropImageFile));
+                    imageView.setBackground(null);
+                }else {
+                    Toast.makeText(this, "截图失败", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
+
+            case REQUEST_GALLERY:
+                if (resultCode == RESULT_OK && data != null){
+                    String imagePath = handleImage(data);
+                    crop(imagePath);
+                }else {
+                    Toast.makeText(this, "打开图库失败", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
         }
+    }
+
+    private void crop(String imagePath){
+        //mCropImageFile = FileUtils.createTmpFile(getBaseContext());
+        mCropImageFile = getmCropImageFile();
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(getImageContentUri(new File(imagePath)), "image/*");
+        intent.putExtra("crop", true);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 500);
+        intent.putExtra("outputY", 500);
+        intent.putExtra("scale", true);
+        intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mCropImageFile));
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true);
+        startActivityForResult(intent, REQUEST_CROP);
+    }
+
+    //把fileUri转换成ContentUri
+    public Uri getImageContentUri(File imageFile){
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor
+                    .getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri baseUri = Uri.parse("content://media/external/images/media");
+            return Uri.withAppendedPath(baseUri, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    //获取裁剪的图片保存地址
+    private File getmCropImageFile(){
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            //File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),"temp.jpg");
+            File file = new File(getExternalCacheDir(),  "heads.jpg");
+            System.out.println("filepath="+file);
+            return file;
+        }
+        return null;
+    }
+
+    private String handleImage(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = null;
+        if (Build.VERSION.SDK_INT >= 19) {
+            if (DocumentsContract.isDocumentUri(this, uri)) {
+                String docId = DocumentsContract.getDocumentId(uri);
+                if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                    String id = docId.split(":")[1];
+                    String selection = MediaStore.Images.Media._ID + "=" + id;
+                    imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+                } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                    Uri contentUri = ContentUris.withAppendedId(Uri.parse("" +
+                            "content://downloads/public_downloads"), Long.valueOf(docId));
+                    imagePath = getImagePath(contentUri, null);
+                }
+            } else if ("content".equals(uri.getScheme())) {
+                imagePath = getImagePath(uri, null);
+            }
+        } else {
+            imagePath = getImagePath(uri, null);
+        }
+        return imagePath;
+    }
+
+    private String getImagePath(Uri uri, String seletion) {
+        String path = null;
+        Cursor cursor = getContentResolver().query(uri, null, seletion, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
     }
 
     public void showSetNameDialog(){
@@ -390,19 +407,6 @@ public class MyMessage extends AppCompatActivity {
         });
         builder.show();
         return;
-    }
-
-    /**
-     * 检查设备是否存在SDCard的工具方法
-     */
-    public static boolean hasSdcard() {
-        String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            // 有存储的SDCard
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void showSetPhoneDialog(){

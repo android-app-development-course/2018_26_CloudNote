@@ -76,6 +76,7 @@ public class MyActivity extends Fragment {
     private String nowTime;
     private SimpleDateFormat simpleDateFormat;
     private boolean empty = false;
+    private String myFile = "/storage/emulated/0/Android/data/com.example.note.mynote/cache/";
 
     @Nullable
     @Override
@@ -130,7 +131,7 @@ public class MyActivity extends Fragment {
     public void onStart() {
         super.onStart();
         if(logined){
-            Bitmap bt = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+"/test/" + "heads.jpg");// 从SD卡中找头像，转换成Bitmap
+            Bitmap bt = BitmapFactory.decodeFile(myFile+ "heads.jpg");// 从SD卡中找头像，转换成Bitmap
             if (bt != null) {
                 @SuppressWarnings("deprecation")
                 Drawable drawable = new BitmapDrawable(bt);// 转换成drawable
