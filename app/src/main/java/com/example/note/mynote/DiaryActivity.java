@@ -1,9 +1,11 @@
 package com.example.note.mynote;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,9 +14,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +36,10 @@ public class DiaryActivity extends Fragment{
     private MyBaseAdapter3 myBaseAdapter3;
     public  SlideLayout slideLayout = null;
     private MyHelper myHelper;
+    private EditText editText;
+    private Button button1;
+    private String string;
+    private boolean done = false;
 
     @Nullable
     @Override
@@ -47,10 +55,45 @@ public class DiaryActivity extends Fragment{
         arrayTimes = new ArrayList<String>();
         arrayContent = new ArrayList<String>();
         diaryListView = (ListView) getActivity().findViewById(R.id.diarylv);
+        editText = (EditText) getActivity().findViewById(R.id.editMsg);
+        button1 = (Button) getActivity().findViewById(R.id.queryMsgs);
         myBaseAdapter3 = new MyBaseAdapter3();
         diaryListView.setAdapter(myBaseAdapter3);
         myHelper = new MyHelper(getContext());
-        initial();
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("hahah");
+                if(!done){
+                    string = editText.getText().toString();
+                    string = string.trim();
+                    if(string.equals("")){
+                        Toast.makeText(getContext(),"搜索不能为空",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    querys(string);
+                    done = true;
+                    Drawable drawable = ResourcesCompat.getDrawable(getResources(),R.drawable.ic_clear_black_24dp,null);
+                    button1.setBackground(drawable);
+                }
+                else{
+                    editText.setText("");
+                    initial();
+                    done = false;
+                    Drawable drawable = ResourcesCompat.getDrawable(getResources(),R.drawable.ic_search_black_24dp,null);
+                    button1.setBackground(drawable);
+                }
+            }
+        });
+    }
+
+    public void querys(String str){
+        myHelper.find(str,"Diary");
+        arrayTitle = myHelper.backValue1();
+        arrayContent = myHelper.backValue2();
+        arrayTimes = myHelper.backValue3();
+        myBaseAdapter3.notifyDataSetChanged();
+        return;
     }
 
     @Override
@@ -65,12 +108,6 @@ public class DiaryActivity extends Fragment{
             }
         }
         return;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        initial();
     }
 
     @Override

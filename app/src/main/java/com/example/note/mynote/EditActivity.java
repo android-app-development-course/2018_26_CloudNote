@@ -1,5 +1,7 @@
 package com.example.note.mynote;
 
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private String contents = "";
     private int fragmentNums = 0;
     private int num = -1;
+    private boolean modify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,14 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.save:
+                if(modify){
+                    Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_check_black_24dp, null);
+                    button2.setBackground(drawable);
+                    modify = false;
+                    editTitle.setEnabled(true);
+                    editText.setEnabled(true);
+                    break;
+                }
                 titles = editTitle.getText().toString();
                 contents = editText.getText().toString();
                 titles = titles.trim();
@@ -64,7 +75,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("title",titles);
                 intent.putExtra("content",contents);
                 setResult(2,intent);
-                Toast.makeText(getApplicationContext(),"添加成功！",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"编辑成功！",Toast.LENGTH_SHORT).show();
                 finish();
                 break;
         }
@@ -75,6 +86,13 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         intents = getIntent();
         titles = intents.getStringExtra("myTitle");
         contents = intents.getStringExtra("myValue");
+        if(titles!=null&&contents!=null){
+            modify = true;
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mode_edit_black_24dp, null);
+            button2.setBackground(drawable);
+            editTitle.setEnabled(false);
+            editText.setEnabled(false);
+        }
         editTitle.setText(titles);
         editText.setText(contents);
         return;

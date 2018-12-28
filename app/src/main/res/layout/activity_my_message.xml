@@ -8,8 +8,8 @@
 
     <com.example.note.mynote.AvatarImageView
         android:id="@+id/msg_image"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_below="@+id/msg_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"

@@ -27,6 +27,6 @@
         android:layout_height="24dp"
         android:layout_gravity="center"
         android:layout_marginLeft="125dp"
-        android:background="@drawable/ic_assignment_turned_in_black_24dp"/>
+        android:background="@drawable/ic_check_black_24dp"/>
 
 </LinearLayout>

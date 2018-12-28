@@ -19,7 +19,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="140dp"
         android:textColor="@android:color/white"
-        android:text="编辑"
+        android:text="新建"
         android:textSize="20dp"/>
 
     <Button
@@ -28,6 +28,6 @@
         android:layout_height="24dp"
         android:layout_gravity="center"
         android:layout_marginLeft="140dp"
-        android:background="@drawable/ic_assignment_turned_in_black_24dp"/>
+        android:background="@drawable/ic_check_black_24dp"/>
 
 </LinearLayout>

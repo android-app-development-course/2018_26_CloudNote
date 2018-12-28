@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -74,6 +75,7 @@ public class MyActivity extends Fragment {
     private JSONArray jsonArray = new JSONArray();
     private String nowTime;
     private SimpleDateFormat simpleDateFormat;
+    private boolean empty = false;
 
     @Nullable
     @Override
@@ -128,7 +130,7 @@ public class MyActivity extends Fragment {
     public void onStart() {
         super.onStart();
         if(logined){
-            Bitmap bt = BitmapFactory.decodeFile(path + "head.jpg");// 从SD卡中找头像，转换成Bitmap
+            Bitmap bt = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+"/test/" + "heads.jpg");// 从SD卡中找头像，转换成Bitmap
             if (bt != null) {
                 @SuppressWarnings("deprecation")
                 Drawable drawable = new BitmapDrawable(bt);// 转换成drawable
@@ -203,6 +205,11 @@ public class MyActivity extends Fragment {
                                 progressBar.setVisibility(View.VISIBLE);
                                 post();
                                 progressBar.setVisibility(View.INVISIBLE);
+                                if(empty){
+                                    Toast.makeText(getContext(),"暂无信息可备份！",Toast.LENGTH_SHORT).show();
+                                    empty = false;
+                                    return;
+                                }
                                 if(done){
                                     Toast.makeText(getContext(),"备份成功！",Toast.LENGTH_SHORT).show();
                                 }
@@ -241,6 +248,11 @@ public class MyActivity extends Fragment {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 if(done){
                                     done = false;
+                                    if(empty){
+                                        empty = false;
+                                        Toast.makeText(getContext(),"请先备份！",Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
                                     postes();
                                     if(done){
                                         Toast.makeText(getContext(),"恢复成功！",Toast.LENGTH_SHORT).show();
@@ -406,6 +418,10 @@ public class MyActivity extends Fragment {
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+                }
+                if(arrayList1.size()==0&&brrbyList1.size()==0){
+                    empty = true;
+                    return;
                 }
                 //把BasicNameValuePair放入集合中
                 if(arrayList1!=null){
@@ -673,6 +689,9 @@ public class MyActivity extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String backValue = jsonObject.optString("success");
                 jsonArray = jsonObject.optJSONArray("data");
+                if(jsonArray.length()==0){
+                    empty = true;
+                }
                 result = backValue;
             } catch (JSONException e) {
                 e.printStackTrace();

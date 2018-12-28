@@ -2,9 +2,11 @@ package com.example.note.mynote;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +16,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,6 +39,10 @@ public class NoteActivity extends Fragment {
     public  SlideLayout slideLayout = null;
     private int locate = 0;
     private MyHelper myHelper;
+    private EditText editText;
+    private Button button1;
+    private String string;
+    private boolean done = false;
 
     @Nullable
     @Override
@@ -53,23 +61,57 @@ public class NoteActivity extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        initial();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         arrayTitle = new ArrayList<String>();
         arrayTimes = new ArrayList<String>();
         arrayContent = new ArrayList<String>();
         noteListView = (ListView) getActivity().findViewById(R.id.notelv);
+        editText = (EditText) getActivity().findViewById(R.id.editMsg);
+        button1 = (Button) getActivity().findViewById(R.id.queryMsg);
         baseAdapter1 = new MyBaseAdapter1();
         noteListView.setAdapter(baseAdapter1);
         myHelper = new MyHelper(getContext());
-        initial();
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!done){
+                    string = editText.getText().toString();
+                    string = string.trim();
+                    if(string.equals("")){
+                        Toast.makeText(getContext(),"搜索不能为空",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    querys(string);
+                    done = true;
+                    Drawable drawable = ResourcesCompat.getDrawable(getResources(),R.drawable.ic_clear_black_24dp,null);
+                    button1.setBackground(drawable);
+                }
+                else{
+                    editText.setText("");
+                    initial();
+                    done = false;
+                    Drawable drawable = ResourcesCompat.getDrawable(getResources(),R.drawable.ic_search_black_24dp,null);
+                    button1.setBackground(drawable);
+                }
+            }
+        });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        System.out.println("idoit");
-        initial();
+    public void querys(String str){
+        myHelper.find(str,"Note");
+        ArrayList<String> arrayLists = myHelper.backValue1();
+        arrayTitle = myHelper.backValue1();
+        arrayContent = myHelper.backValue2();
+        arrayTimes = myHelper.backValue3();
+        baseAdapter1.notifyDataSetChanged();
+        return;
     }
 
     @Override
@@ -97,6 +139,7 @@ public class NoteActivity extends Fragment {
     private void initial(){
         myHelper.initial("Note");
         arrayTitle = myHelper.backValue1();
+        System.out.println("long="+arrayTitle.size());
         arrayContent = myHelper.backValue2();
         arrayTimes = myHelper.backValue3();
         baseAdapter1.notifyDataSetChanged();
